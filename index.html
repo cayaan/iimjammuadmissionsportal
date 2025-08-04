@@ -2,69 +2,6 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>IIM Jammu Admission Portal</title>
-  <style>
-    body {
-      background-color: #d0eaff; /* Light blue */
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      border: 10px solid red;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .container {
-      background-color: white;
-      padding: 30px;
-      border: 5px solid red;
-      border-radius: 10px;
-      width: 90%;
-      max-width: 600px;
-    }
-    h1, h2 {
-      color: #003366;
-      text-align: center;
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-    }
-    button {
-      background-color: red;
-      color: white;
-      border: none;
-      padding: 10px;
-      cursor: pointer;
-      width: 100%;
-    }
-    .offer {
-      white-space: pre-wrap;
-      background-color: #f9f9f9;
-      padding: 15px;
-      border-radius: 5px;
-      margin-top: 20px;
-    }
-  </style>
-</head>
-<body>
-  <div class="container" id="loginSection">
-    <h1>IIM Jammu Admission Portal</h1>
-    <h2>Login to Check Admission Status</h2>
-    <input type="text" id="jipmatID" placeholder="Enter JIPMAT ID">
-    <input type="date" id="dob">
-    <button onclick="validateLogin()">Login</button>
-    <p id="error" style="color: red; text-align: center;"></p>
-  </div>
-
-  <div class="container" id="offerSection" style="display: none;">
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
   <title>IIM Jammu Admission Dashboard</title>
   <style>
     body {
@@ -179,22 +116,5 @@
       Indian Institute of Management Jammu</p>
     </div>
   </div>
-</body>
-</html>
-
-    function validateLogin() {
-      const enteredID = document.getElementById("jipmatID").value.trim();
-      const enteredDOB = document.getElementById("dob").value;
-      const correctID = "250410000035";
-      const correctDOB = "2006-09-15";
-
-      if (enteredID === correctID && enteredDOB === correctDOB) {
-        document.getElementById("loginSection").style.display = "none";
-        document.getElementById("offerSection").style.display = "block";
-      } else {
-        document.getElementById("error").innerText = "Invalid credentials. Please try again.";
-      }
-    }
-  </script>
 </body>
 </html>
