@@ -2,188 +2,212 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IIM Jammu Admission Portal</title>
   <style>
     body {
-      background-color: #d6f0ff;
-      font-family: 'Georgia', serif;
+      font-family: Arial, sans-serif;
       margin: 0;
-      padding: 0;
-      border: 10px solid red;
+      background-color: #f2f2f2;
+    }
+    header {
+      background-color: #800000;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      color: white;
+    }
+    header img {
+      height: 60px;
+      margin-right: 20px;
     }
     .container {
-      padding: 20px;
-      max-width: 800px;
+      padding: 30px;
+      max-width: 700px;
       margin: auto;
       background-color: white;
       margin-top: 30px;
       border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    h1, h2 {
-      text-align: center;
+    .input-group {
+      margin-bottom: 15px;
     }
     label {
       display: block;
-      margin-top: 10px;
+      margin-bottom: 5px;
       font-weight: bold;
     }
     input {
       width: 100%;
       padding: 10px;
-      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
     }
     button {
-      background-color: red;
+      padding: 10px 20px;
+      background-color: #800000;
       color: white;
-      padding: 12px;
-      margin-top: 20px;
-      font-size: 16px;
-      font-weight: bold;
       border: none;
+      border-radius: 5px;
       cursor: pointer;
     }
-    .hidden {
+    #loading {
       display: none;
+      margin-top: 15px;
     }
-    #modal {
+    .popup {
       position: fixed;
-      background-color: rgba(0,0,0,0.6);
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6);
       display: none;
-      align-items: center;
       justify-content: center;
+      align-items: center;
     }
-    #modalContent {
-      background-color: white;
+    .popup-content {
+      background: white;
       padding: 20px;
-      border: 3px solid red;
+      border-radius: 10px;
       text-align: center;
-      width: 90%;
       max-width: 400px;
     }
-    #modalContent button {
-      margin: 10px 5px 0;
-      background-color: red;
+    .popup-content p {
+      margin-bottom: 20px;
+    }
+    .popup-content button {
+      background-color: darkred;
+      margin: 0 10px;
     }
     footer {
       text-align: center;
-      margin-top: 40px;
-      font-weight: bold;
-      color: red;
-    }
-    #logout {
-      position: absolute;
-      right: 20px;
-      top: 20px;
-      background-color: red;
-      color: white;
-      padding: 8px 12px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .boldred {
-      color: red;
-      font-weight: bold;
+      margin-top: 30px;
+      padding: 10px;
+      background-color: #eee;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
-  <div class="container" id="loginPage">
-    <h1>IIM JAMMU ADMISSION PORTAL</h1>
-    <p><strong>Login to check Admission Status</strong></p>
-    <label for="jipmat">JIPMAT ID</label>
-    <input type="text" id="jipmat">
+
+<header>
+  <img src="https://upload.wikimedia.org/wikipedia/en/3/3c/Indian_Institute_of_Management_Jammu_Logo.png" alt="IIM Jammu Logo">
+  <h2>IIM Jammu Admission Portal</h2>
+</header>
+
+<div class="container" id="loginContainer">
+  <h3>Login</h3>
+  <div class="input-group">
+    <label for="fatherName">FATHER'S NAME (BLOCK LETTERS)</label>
+    <input type="text" id="fatherName">
+  </div>
+  <div class="input-group">
+    <label for="jipmatId">JIPMAT ID</label>
+    <input type="text" id="jipmatId">
+  </div>
+  <div class="input-group">
     <label for="dob">Date of Birth</label>
-    <input type="text" id="dob" placeholder="DD MMM YYYY (e.g. 01 JAN 2007)">
-    <label for="father">FATHER'S NAME (in block letters)</label>
-    <input type="text" id="father">
-    <button onclick="login()">LOGIN</button>
+    <input type="date" id="dob">
   </div>
+  <button onclick="handleLogin()">Login</button>
+  <div id="loading">Loading...</div>
+</div>
 
-  <div class="container hidden" id="dashboard">
-    <div id="logout" onclick="logout()">LOGOUT</div>
-    <h2>Welcome, AYAAN CHAUDHARY</h2>
-    <h3 class="boldred">STATUS: OFFER OF ADMISSION ISSUED BY ADMISSIONS OFFICE, IIM JAMMU. ISSUED ON 5 AUGUST 2025.</h3>
-    
-    <p><strong>JIPMAT ID:</strong> 250410000035</p>
-    <p><strong>FATHER’S NAME:</strong> AMIT CHAUDHARY</p>
-    <p><strong>DOB:</strong> 15 SEPT 2006</p>
+<div class="container" id="dashboard" style="display:none;">
+  <h3>Welcome, AYAAN CHAUDHARY</h3>
+  <p>JIPMAT ID: 250410000035</p>
+  <p>DOB: 15 SEPTEMBER 2006</p>
+  <button onclick="showOfferLetter()">View Admission Status</button>
+  <button onclick="logout()" style="background-color:red; float:right;">Logout</button>
 
-    <button onclick="showOffer()">CLICK TO VIEW YOUR ADMISSION STATUS</button>
-
-    <div id="offer" class="hidden">
-      <p>Subject: Offer of Admission to the Five-Year Integrated Programme in Management (IPM) at IIM Jammu (Batch 2025–2030)</p>
-      <p>Dear AYAAN CHAUDHARY,</p>
-      <p>We are pleased to inform you that, based on your performance in the Joint Integrated Programme in Management Admission Test (JIPMAT) 2025, you have been provisionally selected for admission to the Five-Year Integrated Programme in Management (IPM) at IIM Jammu for the academic session 2025–2030 under the OBC-NCL (Male) category in 3rd MERIT LIST.</p>
-      <p>Please note that this offer is provisional and subject to verification of all the academic and category documents at the time of registration. Any discrepancy or misrepresentation of facts may lead to immediate cancellation of admission without further notice.</p>
-      <p>To confirm your acceptance of this offer and secure your seat in the programme, you are required to remit a non-refundable Offer Acceptance Amount (OAA) of INR 50,000 (Fifty Thousand Only) on or before 23:59 hours, 9th August 2025.</p>
-      <p><strong>Payment Details:</strong><br>
-        • Amount: ₹50,000<br>
-        • Payment Deadline: 8th August 2025, 4:59 PM IST (strictly non-extendable)<br>
-        • Mode of Payment: The payment must be made through the online admission portal.
-
-        
-       <p></p> <button onclick="showModal()">CLICK HERE TO PAY</button><p></p>
-      </p>
-      <p>Failure to remit the Offer Acceptance Amount by the specified deadline will be construed as non-acceptance of this offer, and your candidature will stand cancelled automatically without any further communication from our side. The seat so vacated will be offered to the next eligible candidate on the waiting list.</p>
-      <p>Upon successful payment and subsequent verification of documents, you will receive further communication regarding the registration, orientation schedule, hostel allocation, and commencement of academic activities.</p>
-      <p>We take this opportunity to congratulate you and extend a warm welcome to the IIM Jammu community. We are confident that your journey with us will be intellectually enriching and personally rewarding.</p>
-      <p>Should you require any clarification regarding this admission offer, please feel free to reach out to us at ipm.admissions@iimj.ac.in.</p>
-      <p>With best wishes,<br>
-        Yours sincerely,<br>
-        Chairperson – Admissions<br>
-        Indian Institute of Management Jammu</p>
-    </div>
+  <div id="offerLetter" style="margin-top:20px; display:none;">
+    <h3>STATUS: OFFER OF ADMISSION ISSUED BY ADMISSIONS OFFICE, IIM JAMMU</h3>
+    <p><strong>Issued on:</strong> 5 August 2025</p>
+    <p>
+      Subject: Offer of Admission to the Five-Year Integrated Programme in Management (IPM) at IIM Jammu (Batch 2025–2030)<br><br>
+      Dear AYAAN CHAUDHARY,<br><br>
+      We are pleased to inform you that, based on your performance in the Joint Integrated Programme in Management Admission Test (JIPMAT) 2025, you have been provisionally selected for admission to the Five-Year Integrated Programme in Management (IPM) at IIM Jammu for the academic session 2025–2030 under the OBC-NCL (Male) category in the 3rd Merit List released on 5th August 2025.<br><br>
+      Please note that this offer is provisional and subject to verification of all the academic and category documents at the time of registration. Any discrepancy or misrepresentation of facts may lead to immediate cancellation of admission without further notice.<br><br>
+      To confirm your acceptance of this offer and secure your seat in the programme, you are required to remit a non-refundable Offer Acceptance Amount (OAA) of INR 50,000 (Fifty Thousand Only) on or before 4:59 PM IST, 8th August 2025.<br><br>
+      Payment Details:<br>
+      • Amount: ₹50,000<br>
+      • Payment Deadline: 7th August 2025, 16:59 IST (strictly non-extendable)<br>
+      • Mode of Payment: The payment must be made through the online admission portal, the details of which will be shared with you separately via your registered email ID.<br><br>
+      Failure to remit the Offer Acceptance Amount by the specified deadline will be construed as non-acceptance of this offer, and your candidature will stand cancelled automatically without any further communication from our side. The seat so vacated will be offered to the next eligible candidate on the waiting list.<br><br>
+      Upon successful payment and subsequent verification of documents, you will receive further communication regarding the registration, orientation schedule, hostel allocation, and commencement of academic activities.<br><br>
+      We take this opportunity to congratulate you and extend a warm welcome to the IIM Jammu community. We are confident that your journey with us will be intellectually enriching and personally rewarding.<br><br>
+      Should you require any clarification regarding this admission offer, please feel free to reach out to us at ipm.admissions@iimj.ac.in.<br><br>
+      With best wishes,<br><br>
+      Yours sincerely,<br>
+      Chairperson – Admissions<br>
+      Indian Institute of Management Jammu
+    </p>
+    <button onclick="showPopup()" style="background-color:red;">CLICK HERE TO PAY FEE</button>
   </div>
+</div>
 
-  <div id="modal">
-    <div id="modalContent">
-      <p><strong>Dear Candidate,</strong><br>
-        Last date to pay the fee is over.<br><br>
-        You’ll get your refund of EOI Amount of INR 10,000 within a month, to the same bank account via which it was issued.<br><br>
-        <em>J&K Bank</em></p>
-      <button onclick="logout()">LOGOUT</button>
-      <button onclick="closeModal()">CLOSE</button>
-    </div>
+<div class="popup" id="popup">
+  <div class="popup-content">
+    <p><strong>Dear Candidate,</strong><br>
+    Last date to pay the fee is over.<br><br>
+    You’ll get your refund of EOI Amount of INR 10,000 within a month, to the same bank account via which it was issued.<br><br>
+    <em>J&amp;K Bank</em></p>
+    <button onclick="logout()">LOGOUT</button>
+    <button onclick="closePopup()">CLOSE</button>
   </div>
+</div>
 
-  <footer>COPYRIGHT BY INDIAN INSTITUTE OF MANAGEMENT JAMMU, IPM 2025-30 ADMISSION PORTAL</footer>
+<div class="popup" id="errorPopup">
+  <div class="popup-content">
+    <p><strong>NO DETAILS FOUND</strong><br>
+    PLEASE TRY AGAIN</p>
+    <button onclick="closePopup()">CLOSE</button>
+  </div>
+</div>
 
-  <script>
-    function login() {
-      const id = document.getElementById('jipmat').value.trim();
-      const dob = document.getElementById('dob').value.trim().toUpperCase();
-      const father = document.getElementById('father').value.trim().toUpperCase();
+<footer>
+  COPYRIGHT © 2025 IIM JAMMU
+</footer>
 
-      if (id === '250410000035' && dob === '15 SEPT 2006' && father === 'AMIT CHAUDHARY') {
-        document.getElementById('loginPage').classList.add('hidden');
-        document.getElementById('dashboard').classList.remove('hidden');
+<script>
+  function handleLogin() {
+    document.getElementById("loading").style.display = "block";
+    setTimeout(() => {
+      const fatherName = document.getElementById("fatherName").value.toUpperCase();
+      const jipmatId = document.getElementById("jipmatId").value;
+      const dob = document.getElementById("dob").value;
+      if (
+        fatherName === "AMIT CHAUDHARY" &&
+        jipmatId === "250410000035" &&
+        dob === "2006-09-15"
+      ) {
+        document.getElementById("loginContainer").style.display = "none";
+        document.getElementById("dashboard").style.display = "block";
       } else {
-        <div id="modal">
-    <div id="modalContent">
-      <p><strong>NO DETAILS FOUND,</strong><br>
-      <button onclick="closeModal()">CLOSE</button>
+        document.getElementById("errorPopup").style.display = "flex";
       }
-    }
+      document.getElementById("loading").style.display = "none";
+    }, 1500);
+  }
 
-    function logout() {
-      location.reload();
-    }
+  function showOfferLetter() {
+    document.getElementById("offerLetter").style.display = "block";
+  }
 
-    function showOffer() {
-      document.getElementById('offer').classList.remove('hidden');
-    }
+  function logout() {
+    location.reload();
+  }
 
-    function showModal() {
-      document.getElementById('modal').style.display = 'flex';
-    }
+  function showPopup() {
+    document.getElementById("popup").style.display = "flex";
+  }
 
-    function closeModal() {
-      document.getElementById('modal').style.display = 'none';
-    }
-  </script>
+  function closePopup() {
+    document.getElementById("popup").style.display = "none";
+    document.getElementById("errorPopup").style.display = "none";
+  }
+</script>
+
 </body>
 </html>
+
